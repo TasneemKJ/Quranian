@@ -78,7 +78,7 @@ struct SurahRowView: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color(.systemGray6))
+                .fill(Color(.systemGray5))
         )
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
         .padding(.horizontal, 10)
