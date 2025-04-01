@@ -8,10 +8,11 @@
 import SwiftUI
 
 @main
-struct QuranianApp: App {
+struct QuranReaderApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SurahListView()
+                .environment(\.layoutDirection, .rightToLeft)
         }
     }
 }
