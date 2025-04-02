@@ -6,5 +6,7 @@
 	<array>
 		<string>alfont_com_UthmanicHafs_V22.ttf</string>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+   	<false/>
 </dict>
 </plist>
