@@ -17,12 +17,12 @@ struct AyahListView: View {
             VStack(alignment: .trailing, spacing: 8) {
                 HStack {
                     Text("\(ayah.id)")
-                        .font(.system(size: 12, weight: .bold))
+                        .font(Font.custom("KFGQPCHAFSUthmanicScript-Regula", size: 12))
                         .foregroundColor(.secondary)
                         .frame(width: 24)
                     Divider()
                     Text(ayah.text)
-                        .font(.system(size: fontSize, design: .serif))
+                        .font(Font.custom("KFGQPCHAFSUthmanicScript-Regula", size: fontSize))
                 }
                 .padding(.vertical, 4)
             }
