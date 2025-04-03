@@ -27,6 +27,8 @@ struct AthkarView: View {
                             let current = repeatCounts[item.id, default: 0]
                             if current < item.repeatCount {
                                 repeatCounts[item.id] = current + 1
+                            } else {
+                                repeatCounts[item.id] = 0
                             }
                         }) {
                             VStack(spacing: 16) {
@@ -68,7 +70,7 @@ struct AthkarView: View {
                                 }
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color(.systemGray6))
+                                .background(Color(.systemBackground))
                                 .cornerRadius(20)
                             }
                         }
@@ -85,9 +87,11 @@ struct AthkarView: View {
             .onAppear {
                 items = ZekrLoader
                     .load(fileName: categories[selectedIndex].fileName)
+                repeatCounts = [:]
             }
             .onChange(of: selectedIndex) { newIndex in
                 items = ZekrLoader.load(fileName: categories[newIndex].fileName)
+                repeatCounts = [:]
             }
         }
     }
