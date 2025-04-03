@@ -3,6 +3,7 @@ import SwiftUI
 struct AthkarView: View {
     @State private var selectedIndex = 0
     @State private var items: [ZekrItem] = []
+    @State private var repeatCounts: [UUID: Int] = [:]
 
     private let categories: [ZekrCategory] = [
         ZekrCategory(title: "أذكار الصباح", fileName: "sabah"),
@@ -27,6 +28,7 @@ struct AthkarView: View {
                                 Text(item.zekr)
                                     .padding(.bottom, 10)
                                     .frame(maxWidth: .infinity, alignment: .leading)
+
                                 if !item.bless.isEmpty {
                                     Text("\(item.bless)")
                                         .font(.footnote)
@@ -34,15 +36,28 @@ struct AthkarView: View {
                                         .padding(.bottom, 10)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                 }
-                                Text("🔁 التكرار: \(item.repeatCount)")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
+
+                                Button(action: {
+                                    repeatCounts[item.id] = 0
+                                }) {
+                                    Text("\(repeatCounts[item.id, default: 0])/\(item.repeatCount) 🔁")
+                                        .font(.caption)
+                                        .padding(6)
+                                        .background(Color.blue.opacity(0.1))
+                                        .cornerRadius(12)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                }
                             }
                             .padding()
                             .frame(maxWidth: .infinity)
                             .background(Color(.systemGray6))
                             .cornerRadius(20)
+                            .onTapGesture {
+                                let current = repeatCounts[item.id, default: 0]
+                                if current < item.repeatCount {
+                                    repeatCounts[item.id] = current + 1
+                                }
+                            }
                         }
                         .padding(.bottom, 8)
                         .listRowSeparator(.hidden)
