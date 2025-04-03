@@ -94,7 +94,7 @@ struct AthkarView: View {
                 items = ZekrLoader.load(fileName: categories[newIndex].fileName)
                 repeatCounts = [:]
             }
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
