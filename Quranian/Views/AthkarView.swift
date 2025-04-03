@@ -4,6 +4,7 @@ struct AthkarView: View {
     @State private var selectedIndex = 0
     @State private var items: [ZekrItem] = []
     @State private var repeatCounts: [Int: Int] = [:]
+    @Environment(\.colorScheme) var colorScheme
 
     private let categories: [ZekrCategory] = [
         ZekrCategory(title: "أذكار الصباح", fileName: "sabah"),
@@ -35,7 +36,7 @@ struct AthkarView: View {
                                 VStack(spacing: 8) {
                                     Text(item.zekr)
                                         .padding(.bottom, 10)
-                                        .foregroundColor(.primary)
+                                        .foregroundColor(Color.primary)
                                         .frame(
                                             maxWidth: .infinity,
                                             alignment: .leading
@@ -70,7 +71,7 @@ struct AthkarView: View {
                                 }
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color(.systemBackground))
+                                .background(colorScheme == .dark ? Color(.systemGray5) : Color(.systemGray6))
                                 .cornerRadius(20)
                             }
                         }
