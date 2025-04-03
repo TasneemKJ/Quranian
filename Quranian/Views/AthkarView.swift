@@ -3,7 +3,7 @@ import SwiftUI
 struct AthkarView: View {
     @State private var selectedIndex = 0
     @State private var items: [ZekrItem] = []
-    @State private var repeatCounts: [UUID: Int] = [:]
+    @State private var repeatCounts: [Int: Int] = [:]
 
     private let categories: [ZekrCategory] = [
         ZekrCategory(title: "أذكار الصباح", fileName: "sabah"),
@@ -23,40 +23,52 @@ struct AthkarView: View {
 
                 List {
                     ForEach(items) { item in
-                        VStack(spacing: 16) {
-                            VStack(spacing: 8) {
-                                Text(item.zekr)
-                                    .padding(.bottom, 10)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                                if !item.bless.isEmpty {
-                                    Text("\(item.bless)")
-                                        .font(.footnote)
-                                        .foregroundColor(.green)
+                        Button(action: {
+                            let current = repeatCounts[item.id, default: 0]
+                            if current < item.repeatCount {
+                                repeatCounts[item.id] = current + 1
+                            }
+                        }) {
+                            VStack(spacing: 16) {
+                                VStack(spacing: 8) {
+                                    Text(item.zekr)
                                         .padding(.bottom, 10)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
-
-                                Button(action: {
-                                    repeatCounts[item.id] = 0
-                                }) {
-                                    Text("\(repeatCounts[item.id, default: 0])/\(item.repeatCount) 🔁")
+                                        .frame(
+                                            maxWidth: .infinity,
+                                            alignment: .leading
+                                        )
+                                
+                                    if !item.bless.isEmpty {
+                                        Text("\(item.bless)")
+                                            .font(.footnote)
+                                            .foregroundColor(.green)
+                                            .padding(.bottom, 10)
+                                            .frame(
+                                                maxWidth: .infinity,
+                                                alignment: .leading
+                                            )
+                                    }
+                                
+                                    Button(action: {
+                                        repeatCounts[item.id] = 0
+                                    }) {
+                                        Text(
+                                            "\(repeatCounts[item.id, default: 0])/\(item.repeatCount) 🔁"
+                                        )
                                         .font(.caption)
                                         .padding(6)
                                         .background(Color.blue.opacity(0.1))
                                         .cornerRadius(12)
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .frame(
+                                            maxWidth: .infinity,
+                                            alignment: .trailing
+                                        )
+                                    }
                                 }
-                            }
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.systemGray6))
-                            .cornerRadius(20)
-                            .onTapGesture {
-                                let current = repeatCounts[item.id, default: 0]
-                                if current < item.repeatCount {
-                                    repeatCounts[item.id] = current + 1
-                                }
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(20)
                             }
                         }
                         .padding(.bottom, 8)
@@ -70,7 +82,8 @@ struct AthkarView: View {
             .navigationTitle("")
             .environment(\.layoutDirection, .rightToLeft)
             .onAppear {
-                items = ZekrLoader.load(fileName: categories[selectedIndex].fileName)
+                items = ZekrLoader
+                    .load(fileName: categories[selectedIndex].fileName)
             }
             .onChange(of: selectedIndex) { newIndex in
                 items = ZekrLoader.load(fileName: categories[newIndex].fileName)
