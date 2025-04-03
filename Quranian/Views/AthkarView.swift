@@ -33,6 +33,7 @@ struct AthkarView: View {
                                 VStack(spacing: 8) {
                                     Text(item.zekr)
                                         .padding(.bottom, 10)
+                                        .foregroundColor(.primary)
                                         .frame(
                                             maxWidth: .infinity,
                                             alignment: .leading
