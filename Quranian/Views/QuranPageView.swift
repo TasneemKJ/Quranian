@@ -4,7 +4,7 @@ struct QuranPageView: View {
     let pageNumber: Int
     let verses: [Verse]
 
-    @AppStorage("quranFontSize103") private var fontSize: Double = 17
+    @AppStorage("quranFontSize") private var fontSize: Double = 17
     @State private var magnifyBy: CGFloat = 1.0
     @StateObject private var orientationObserver = OrientationObserver()
 
