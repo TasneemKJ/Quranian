@@ -12,23 +12,37 @@ struct QuranPageView: View {
     let verses: [Verse]
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .trailing, spacing: 16) {
-                Text("الصفحة \(pageNumber)")
-                    .font(.title3)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.bottom, 8)
+        VStack(spacing: 16) {
+            Text("الصفحة \(pageNumber)")
+                .font(.headline)
+                .foregroundColor(.gray)
 
-                ForEach(verses) { verse in
-                    Text(verse.text.ar)
-                        .font(.title2)
-                        .multilineTextAlignment(.trailing)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.bottom, 4)
+            Divider().padding(.horizontal)
+
+            ForEach(verses) { verse in
+                HStack {
+                    Spacer()
+                    Text(verseDisplay(verse))
+                        .font(.custom("KFGQPCHAFSUthmanicScript-Regula", size: 26))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                        .lineLimit(nil)
+                    Spacer()
                 }
             }
-            .padding()
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .stroke(Color.green.opacity(0.3), lineWidth: 2)
+                .shadow(radius: 3)
+        )
+        .padding()
         .environment(\.layoutDirection, .rightToLeft)
+    }
+
+    private func verseDisplay(_ verse: Verse) -> String {
+        let ayahStop = "\u{06DD}" // ۝
+        return "\(verse.text.ar) \(ayahStop)"
     }
 }
