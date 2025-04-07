@@ -4,8 +4,9 @@ struct QuranPageView: View {
     let pageNumber: Int
     let verses: [Verse]
 
-    @AppStorage("quranFontSize") private var fontSize: Double = 17
+    @AppStorage("quranFontSize103") private var fontSize: Double = 17
     @State private var magnifyBy: CGFloat = 1.0
+    @StateObject private var orientationObserver = OrientationObserver()
 
     // MARK: - Font Size Limits
     private let minFontSize: Double = 10
@@ -22,7 +23,6 @@ struct QuranPageView: View {
                            let surahName = verses.first?.surahName?.ar {
 
                             VStack(spacing: 12) {
-                    
                                 Text("سورة \(surahName)")
                                     .font(.title3.bold())
                                     .foregroundColor(.primary)
@@ -64,7 +64,7 @@ struct QuranPageView: View {
                                             )
                                     }
                                 }
-                                .frame(width: UIScreen.main.bounds.width * 0.9)
+                                .frame(width: UIScreen.main.bounds.width * 0.8)
                                 .padding(.horizontal)
                             }
                         }
@@ -83,6 +83,10 @@ struct QuranPageView: View {
                 .padding(.bottom, 8)
         }
         .padding(.horizontal)
+        .onChange(of: orientationObserver.orientation) { _ in
+            // 👇 This line forces the view to redraw on orientation change.
+            withAnimation { _ = UUID() }
+        }
     }
 
     private var groupedBySurah: [Int: [Verse]] {
@@ -101,8 +105,7 @@ struct QuranPageView: View {
             } else {
                 return line
             }
-        }
-        .joined(separator: " ")
+        }.joined(separator: " ")
     }
 
     private func ayahNumberCircle(_ number: Int) -> String {
