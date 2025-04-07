@@ -4,7 +4,7 @@ struct QuranPageView: View {
     let pageNumber: Int
     let verses: [Verse]
 
-    @AppStorage("quranFontSize") private var fontSize: Double = 18
+    @AppStorage("quranFontSize") private var fontSize: Double = 17
     @State private var magnifyBy: CGFloat = 1.0
 
     // MARK: - Font Size Limits
@@ -22,13 +22,16 @@ struct QuranPageView: View {
                            let surahName = verses.first?.surahName?.ar {
 
                             VStack(spacing: 12) {
-                                // Surah header
+                                // 🟢 Modern Surah Header Style
                                 Text("سورة \(surahName)")
-                                    .font(.title3)
-                                    .bold()
+                                    .font(.title3.bold())
                                     .foregroundColor(.primary)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(Color.green.opacity(0.1))
+                                    .clipShape(Capsule())
 
-                                // Basmala before verse 1 (if applicable)
+                                // ✅ Basmala before verse 1 (if applicable)
                                 if shouldShowBasmala(for: surahNumber),
                                    verses.contains(where: { $0.number == 1 }) {
                                     Text("بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ")
@@ -36,11 +39,17 @@ struct QuranPageView: View {
                                         .multilineTextAlignment(.center)
                                 }
 
-                                // Verses of the surah
+                                // 🧾 Verses of the surah (framed card style)
                                 Text(renderVerses(verses))
                                     .font(.custom("KFGQPCHAFSUthmanicScript-Regula", size: CGFloat(fontSize) * magnifyBy))
                                     .multilineTextAlignment(.center)
                                     .padding()
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 24)
+                                            .stroke(Color.green.opacity(0.3), lineWidth: 2)
+                                            .background(Color.white.opacity(0.0001))
+                                            .shadow(radius: 2)
+                                    )
                                     .environment(\.layoutDirection, .rightToLeft)
                                     .gesture(
                                         MagnificationGesture()
@@ -55,9 +64,12 @@ struct QuranPageView: View {
                                             }
                                     )
                             }
+                            .padding(.horizontal)
                         }
                     }
                 }
+                .padding(.top, 8)
+                .padding(.bottom, 12)
             }
 
             // Zoom controls
