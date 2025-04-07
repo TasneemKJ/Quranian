@@ -4,11 +4,11 @@ struct QuranPageView: View {
     let pageNumber: Int
     let verses: [Verse]
 
-    @AppStorage("quranFontSize") private var fontSize: Double = 28
+    @AppStorage("quranFontSize") private var fontSize: Double = 18
     @State private var magnifyBy: CGFloat = 1.0
 
     // MARK: - Font Size Limits
-    private let minFontSize: Double = 18
+    private let minFontSize: Double = 10
     private let maxFontSize: Double = 60
 
     var body: some View {
