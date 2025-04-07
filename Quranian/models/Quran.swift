@@ -34,6 +34,8 @@ struct Verse: Codable, Identifiable {
     let juz: Int
     let sajda: Sajda
     
+    var surahName: SurahName?
+    
     var id: Int { number }
 }
 

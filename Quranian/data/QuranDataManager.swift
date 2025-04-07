@@ -18,7 +18,14 @@ class QuranDataManager {
             let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             let surahs = try decoder.decode([Surah].self, from: data)
-            return surahs.flatMap { $0.verses }
+            return surahs.flatMap { surah in
+                surah.verses.map { verse in
+                    var v = verse
+                    v.surahName = surah.name
+                    return v
+                }
+            }
+
         } catch {
             fatalError("Decoding error: \(error)")
         }
