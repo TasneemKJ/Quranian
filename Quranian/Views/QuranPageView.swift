@@ -22,7 +22,7 @@ struct QuranPageView: View {
                            let surahName = verses.first?.surahName?.ar {
 
                             VStack(spacing: 12) {
-                                // 🟢 Modern Surah Header Style
+                    
                                 Text("سورة \(surahName)")
                                     .font(.title3.bold())
                                     .foregroundColor(.primary)
@@ -31,7 +31,6 @@ struct QuranPageView: View {
                                     .background(Color.green.opacity(0.1))
                                     .clipShape(Capsule())
 
-                                // ✅ Basmala before verse 1 (if applicable)
                                 if shouldShowBasmala(for: surahNumber),
                                    verses.contains(where: { $0.number == 1 }) {
                                     Text("بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ")
@@ -39,7 +38,6 @@ struct QuranPageView: View {
                                         .multilineTextAlignment(.center)
                                 }
 
-                                // 🧾 Verses of the surah (framed card style)
                                 Text(renderVerses(verses))
                                     .font(.custom("KFGQPCHAFSUthmanicScript-Regula", size: CGFloat(fontSize) * magnifyBy))
                                     .multilineTextAlignment(.center)
@@ -72,11 +70,9 @@ struct QuranPageView: View {
                 .padding(.bottom, 12)
             }
 
-            // Zoom controls
             zoomControls
                 .padding(.top, 4)
 
-            // Page Number
             Text("الصفحة \(pageNumber)")
                 .font(.footnote)
                 .foregroundColor(.gray)
@@ -85,17 +81,14 @@ struct QuranPageView: View {
         .padding(.horizontal)
     }
 
-    // MARK: - Group verses by surah
     private var groupedBySurah: [Int: [Verse]] {
         Dictionary(grouping: verses, by: { $0.surahNumber ?? -1 })
     }
 
-    // MARK: - Basmala Logic
     private func shouldShowBasmala(for surahNumber: Int) -> Bool {
         return surahNumber != 1 && surahNumber != 9
     }
 
-    // MARK: - Ayah Text Rendering
     private func renderVerses(_ verses: [Verse]) -> String {
         verses.map { verse in
             let line = "\(verse.text.ar) \(ayahNumberCircle(verse.number))"
@@ -118,7 +111,6 @@ struct QuranPageView: View {
         "5": "٥", "6": "٦", "7": "٧", "8": "٨", "9": "٩"
     ]
 
-    // MARK: - Zoom Controls
     private var zoomControls: some View {
         HStack(spacing: 16) {
             Button(action: {
