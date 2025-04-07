@@ -1,75 +1,63 @@
-//
-//  QuranPageView.swift
-//  Quranian
-//
-//  Created by Tasnim Almousa on 07/04/2025.
-//
-
 import SwiftUI
-
 
 struct QuranPageView: View {
     let pageNumber: Int
     let verses: [Verse]
 
-    @State private var fontSize: CGFloat = 20
+    @AppStorage("quranFontSize") private var fontSize: Double = 28
     @State private var magnifyBy: CGFloat = 1.0
 
+    // MARK: - Font Size Limits
+    private let minFontSize: CGFloat = 15
+    private let maxFontSize: CGFloat = 40
+
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            VStack(spacing: 16) {
-                // Surah Name
-                if let surahName = verses.first?.surahName?.ar {
-                    Text("سورة \(surahName)")
-                        .font(.title3)
-                        .bold()
-                        .foregroundColor(.primary)
-                }
-
-                Divider().padding(.horizontal)
-
-                // Quran Text Block
-                ScrollView {
-                    Text(fullVerseText())
-                        .font(.custom("KFGQPCHAFSUthmanicScript-Regula", size: fontSize))
-                        .multilineTextAlignment(.center)
-                        .padding()
-                        .environment(\.layoutDirection, .rightToLeft)
-                        .gesture(
-                            MagnificationGesture()
-                                .onChanged { scale in
-                                    magnifyBy = min(max(0.6, scale), 2.0)
-                                }
-                                .onEnded { _ in
-                                    withAnimation(.easeInOut) {
-                                        fontSize = min(max(18, fontSize * magnifyBy), 60)
-                                        magnifyBy = 1.0
-                                    }
-                                }
-                        )
-                }
-
-                Divider().padding(.horizontal)
-
-                // Page Number
-                Text("الصفحة \(pageNumber)")
-                    .font(.footnote)
-                    .foregroundColor(.gray)
+        VStack(spacing: 12) {
+            // Surah Title
+            if let surahName = verses.first?.surahName?.ar {
+                Text("سورة \(surahName)")
+                    .font(.title3)
+                    .bold()
+                    .foregroundColor(.primary)
             }
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 24)
-                    .stroke(Color.green.opacity(0.3), lineWidth: 2)
-                    .shadow(radius: 2)
-            )
-            .padding(.horizontal)
 
-            // Zoom Buttons
+            Divider().padding(.horizontal)
+
+            // Quran Text
+            ScrollView {
+                Text(fullVerseText())
+                    .font(.custom("KFGQPCHAFSUthmanicScript-Regula", size: CGFloat(fontSize) * magnifyBy))
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    .environment(\.layoutDirection, .rightToLeft)
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged { scale in
+                                magnifyBy = min(max(0.6, scale), 2.0)
+                            }
+                            .onEnded { _ in
+                                withAnimation(.easeInOut) {
+                                    fontSize = min(max(minFontSize, fontSize * magnifyBy), maxFontSize)
+                                    magnifyBy = 1.0
+                                }
+                            }
+                    )
+            }
+
+            // Font Controls above page number
             zoomControls
+                .padding(.top, 8)
+
+            // Page Number
+            Text("الصفحة \(pageNumber)")
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .padding(.bottom, 8)
         }
+        .padding(.horizontal)
     }
 
-    // MARK: - Full Ayah Text
+    // MARK: - Render Ayah Text
     private func fullVerseText() -> String {
         verses.map { verse in
             "\(verse.text.ar) \(ayahNumberCircle(verse.number))"
@@ -86,26 +74,40 @@ struct QuranPageView: View {
         "5": "٥", "6": "٦", "7": "٧", "8": "٨", "9": "٩"
     ]
 
-    // MARK: - Zoom Buttons
+    // MARK: - Zoom Controls (Above Page Number)
     private var zoomControls: some View {
-        VStack {
+        HStack(spacing: 16) {
             Button(action: {
-                withAnimation { fontSize += 2 }
+                withAnimation {
+                    fontSize = max(minFontSize, fontSize - 2)
+                }
             }) {
-                Image(systemName: "plus.magnifyingglass")
-                    .font(.title2)
+                Text("A−")
+                    .font(.headline)
+                    .foregroundColor(.blue)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(Color(UIColor.systemGray6))
+                    .clipShape(Capsule())
             }
-            .accessibilityLabel("تكبير الخط")
-            .padding(.bottom, 4)
 
             Button(action: {
-                withAnimation { fontSize = max(18, fontSize - 2) }
+                withAnimation {
+                    fontSize = min(maxFontSize, fontSize + 2)
+                }
             }) {
-                Image(systemName: "minus.magnifyingglass")
-                    .font(.title2)
+                Text("A+")
+                    .font(.headline)
+                    .foregroundColor(.blue)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(Color(UIColor.systemGray6))
+                    .clipShape(Capsule())
             }
-            .accessibilityLabel("تصغير الخط")
         }
-        .padding()
+        .padding(10)
+        .background(.ultraThinMaterial)
+        .clipShape(Capsule())
+        .shadow(radius: 3)
     }
 }
