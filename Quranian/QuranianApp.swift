@@ -5,7 +5,7 @@ struct QuranianApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
-                SurahListView()
+                QuranPagerRootView()
                     .tabItem {
                         Label("السور", systemImage: "book")
                     }
