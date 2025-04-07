@@ -22,6 +22,7 @@ class QuranDataManager {
                 surah.verses.map { verse in
                     var v = verse
                     v.surahName = surah.name
+                    v.surahNumber = surah.number
                     return v
                 }
             }
