@@ -55,7 +55,7 @@ struct SurahListView: View {
             }
             .listStyle(.plain)
             .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
-            .navigationTitle("اختر السورة")
+            .navigationTitle("")
             .environment(\.layoutDirection, .rightToLeft)
         }
     }
