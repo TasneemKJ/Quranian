@@ -38,31 +38,35 @@ struct QuranPageView: View {
                                         .multilineTextAlignment(.center)
                                 }
 
-                                Text(renderVerses(verses))
-                                    .font(.custom("KFGQPCHAFSUthmanicScript-Regula", size: CGFloat(fontSize) * magnifyBy))
-                                    .multilineTextAlignment(.center)
-                                    .padding()
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 24)
-                                            .stroke(Color.green.opacity(0.3), lineWidth: 2)
-                                            .background(Color.white.opacity(0.0001))
-                                            .shadow(radius: 2)
-                                    )
-                                    .environment(\.layoutDirection, .rightToLeft)
-                                    .gesture(
-                                        MagnificationGesture()
-                                            .onChanged { scale in
-                                                magnifyBy = min(max(0.6, scale), 2.0)
-                                            }
-                                            .onEnded { _ in
-                                                withAnimation(.easeInOut) {
-                                                    fontSize = min(max(minFontSize, fontSize * Double(magnifyBy)), maxFontSize)
-                                                    magnifyBy = 1.0
-                                                }
-                                            }
-                                    )
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 24)
+                                        .stroke(Color.green.opacity(0.3), lineWidth: 2)
+                                        .background(Color.white.opacity(0.0001))
+                                        .shadow(radius: 2)
+
+                                    ScrollView {
+                                        Text(renderVerses(verses))
+                                            .font(.custom("KFGQPCHAFSUthmanicScript-Regula", size: CGFloat(fontSize) * magnifyBy))
+                                            .multilineTextAlignment(.center)
+                                            .padding()
+                                            .environment(\.layoutDirection, .rightToLeft)
+                                            .gesture(
+                                                MagnificationGesture()
+                                                    .onChanged { scale in
+                                                        magnifyBy = min(max(0.6, scale), 2.0)
+                                                    }
+                                                    .onEnded { _ in
+                                                        withAnimation(.easeInOut) {
+                                                            fontSize = min(max(minFontSize, fontSize * Double(magnifyBy)), maxFontSize)
+                                                            magnifyBy = 1.0
+                                                        }
+                                                    }
+                                            )
+                                    }
+                                }
+                                .frame(width: UIScreen.main.bounds.width * 0.9)
+                                .padding(.horizontal)
                             }
-                            .padding(.horizontal)
                         }
                     }
                 }
