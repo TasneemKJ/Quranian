@@ -17,7 +17,8 @@ struct QuranPagerView: View {
                 }
             }
         }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
+        .environment(\.layoutDirection, .rightToLeft)
         .edgesIgnoringSafeArea(.all)
     }
 }
