@@ -9,7 +9,7 @@ import SwiftUI
 
 struct QuranPagerView: View {
     @StateObject private var manager = QuranPageManager(verses: QuranDataManager.loadFromJSON())
-    @State private var selectedPage: Int = 1
+    @AppStorage("lastQuranPage") private var selectedPage: Int = 1
     @State private var showSurahPicker = false
 
     private let surahList = QuranDataManager.getSurahList()
