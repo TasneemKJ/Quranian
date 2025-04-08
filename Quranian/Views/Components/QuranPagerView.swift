@@ -10,6 +10,8 @@ import SwiftUI
 struct QuranPagerView: View {
     @StateObject private var manager = QuranPageManager(verses: QuranDataManager.loadFromJSON())
     @AppStorage("lastQuranPage") private var selectedPage: Int = 1
+    @AppStorage("bookmarkedPages") private var bookmarkedPagesData: Data = Data()
+    @State private var bookmarkedPages: [Int] = []
     @State private var showSurahPicker = false
 
     private let surahList = QuranDataManager.getSurahList()
@@ -31,7 +33,18 @@ struct QuranPagerView: View {
                 .font(.headline)
                 .padding(.leading, 16)
                 .padding(.top, 12)
+
                 Spacer()
+
+                // ⭐ Bookmark Button
+                Button(action: {
+                    toggleBookmark(for: selectedPage)
+                }) {
+                    Image(systemName: bookmarkedPages.contains(selectedPage) ? "bookmark.fill" : "bookmark")
+                        .foregroundColor(.blue)
+                        .padding(.trailing, 16)
+                        .padding(.top, 12)
+                }
             }
 
             // 📖 Main Quran Pages
@@ -52,6 +65,32 @@ struct QuranPagerView: View {
                 showSurahPicker = false
             }
         }
+        .onAppear {
+            loadBookmarks()
+        }
         .environment(\.layoutDirection, .rightToLeft)
+    }
+
+    // MARK: - Bookmarking Logic
+
+    private func loadBookmarks() {
+        if let decoded = try? JSONDecoder().decode([Int].self, from: bookmarkedPagesData) {
+            bookmarkedPages = decoded
+        }
+    }
+
+    private func saveBookmarks() {
+        if let encoded = try? JSONEncoder().encode(bookmarkedPages) {
+            bookmarkedPagesData = encoded
+        }
+    }
+
+    private func toggleBookmark(for page: Int) {
+        if let index = bookmarkedPages.firstIndex(of: page) {
+            bookmarkedPages.remove(at: index)
+        } else {
+            bookmarkedPages.append(page)
+        }
+        saveBookmarks()
     }
 }
