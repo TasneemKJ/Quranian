@@ -42,6 +42,20 @@
 			);
 			target = 898FC2EB2D9B967000AA6247 /* Quranian */;
 		};
+		892E49EC2DA5E9A70049A5C0 /* Exceptions for "Quranian" folder in "QuranianTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				test.storekit,
+			);
+			target = 898FC2F82D9B967300AA6247 /* QuranianTests */;
+		};
+		892E49ED2DA5E9A70049A5C0 /* Exceptions for "Quranian" folder in "QuranianUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				test.storekit,
+			);
+			target = 898FC3022D9B967300AA6247 /* QuranianUITests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -49,6 +63,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				891334282D9D54D600C3B263 /* Exceptions for "Quranian" folder in "Quranian" target */,
+				892E49EC2DA5E9A70049A5C0 /* Exceptions for "Quranian" folder in "QuranianTests" target */,
+				892E49ED2DA5E9A70049A5C0 /* Exceptions for "Quranian" folder in "QuranianUITests" target */,
 			);
 			path = Quranian;
 			sourceTree = "<group>";
