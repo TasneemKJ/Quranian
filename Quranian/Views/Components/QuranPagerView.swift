@@ -12,7 +12,9 @@ struct QuranPagerView: View {
     @AppStorage("lastQuranPage") private var selectedPage: Int = 1
     @AppStorage("bookmarkedPages") private var bookmarkedPagesData: Data = Data()
     @State private var bookmarkedPages: [Int] = []
+
     @State private var showSurahPicker = false
+    @State private var showBookmarks = false
 
     private let surahList = QuranDataManager.getSurahList()
 
@@ -36,15 +38,27 @@ struct QuranPagerView: View {
 
                 Spacer()
 
-                // ⭐ Bookmark Button
+                // 📖 Bookmarks menu
+                Button(action: {
+                    showBookmarks = true
+                }) {
+                    Image(systemName: "book")
+                        .foregroundColor(.blue)
+                        .imageScale(.large)
+                }
+                .padding(.trailing, 8)
+                .padding(.top, 12)
+
+                // ⭐️ Bookmark toggle
                 Button(action: {
                     toggleBookmark(for: selectedPage)
                 }) {
                     Image(systemName: bookmarkedPages.contains(selectedPage) ? "bookmark.fill" : "bookmark")
                         .foregroundColor(.blue)
-                        .padding(.trailing, 16)
-                        .padding(.top, 12)
+                        .imageScale(.large)
                 }
+                .padding(.trailing, 16)
+                .padding(.top, 12)
             }
 
             // 📖 Main Quran Pages
@@ -64,6 +78,27 @@ struct QuranPagerView: View {
                 selectedPage = selectedSurah.page
                 showSurahPicker = false
             }
+        }
+        .sheet(isPresented: $showBookmarks) {
+            VStack {
+                Text("⭐️ الصفحات المحفوظة")
+                    .font(.headline)
+                    .padding()
+
+                if bookmarkedPages.isEmpty {
+                    Text("لا يوجد صفحات محفوظة")
+                        .foregroundColor(.gray)
+                        .padding()
+                } else {
+                    List(bookmarkedPages.sorted(), id: \.self) { page in
+                        Button("📖 الصفحة \(page)") {
+                            selectedPage = page
+                            showBookmarks = false
+                        }
+                    }
+                }
+            }
+            .presentationDetents([.medium])
         }
         .onAppear {
             loadBookmarks()
