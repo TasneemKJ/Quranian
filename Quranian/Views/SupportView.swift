@@ -12,7 +12,7 @@ import StoreKit
 struct SupportView: View {
     @State private var isSubscribed = false
     @State private var isPurchasing = false
-    private let subscriptionID = "support.dev.001"
+    private let subscriptionID = "support.developer.001"
 
     var body: some View {
         VStack(spacing: 24) {
