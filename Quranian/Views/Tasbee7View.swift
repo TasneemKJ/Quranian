@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct Tasbee7View: View {
-    @State private var count: Int = UserDefaults.standard.integer(forKey: "tasbee7Count")
+    @AppStorage("tasbee7Count") private var count: Int = UserDefaults.standard.integer(forKey: "tasbee7Count")
 
     var body: some View {
         VStack(spacing: 40) {
