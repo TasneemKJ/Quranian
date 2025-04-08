@@ -95,10 +95,11 @@ struct QuranPagerView: View {
                             selectedPage = page
                             showBookmarks = false
                         }
-                    }
+                    }.environment(\.layoutDirection, .rightToLeft)
                 }
             }
             .presentationDetents([.medium])
+            .environment(\.layoutDirection, .rightToLeft)
         }
         .onAppear {
             loadBookmarks()
