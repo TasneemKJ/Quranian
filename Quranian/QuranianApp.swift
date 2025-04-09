@@ -17,10 +17,6 @@ struct QuranianApp: App {
                     .tabItem {
                         Label("تسبيح", systemImage: "hands.sparkles")
                     }
-                SupportView()
-                    .tabItem {
-                        Label("ادعم", systemImage: "heart")
-                    }
             }.environment(\.layoutDirection, .rightToLeft)
         }
     }
