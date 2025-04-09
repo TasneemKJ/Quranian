@@ -11,6 +11,9 @@ import StoreKit
 struct SupportView: View {
     @State private var isSubscribed = false
     @State private var isPurchasing = false
+    @State private var showErrorAlert = false
+    @State private var errorMessage = ""
+    
     private let subscriptionID = "support.developer.001"
 
     var body: some View {
@@ -44,6 +47,11 @@ struct SupportView: View {
                             .cornerRadius(12)
                     }
                 }
+                .alert("Error", isPresented: $showErrorAlert) {
+                    Button("OK", role: .cancel) {}
+                } message: {
+                    Text(errorMessage)
+                }
             }
 
             Spacer()
@@ -75,19 +83,27 @@ struct SupportView: View {
 
         do {
             let products = try await Product.products(for: [subscriptionID])
-            guard let product = products.first else { return }
+            guard let product = products.first else {
+                errorMessage = "Subscription not available. Please try again later."
+                showErrorAlert = true
+                return
+            }
 
             let result = try await product.purchase()
             switch result {
             case .success(let verification):
                 if case .verified(_) = verification {
                     await checkSubscriptionStatus()
+                } else {
+                    errorMessage = "Purchase could not be verified."
+                    showErrorAlert = true
                 }
             default:
                 break
             }
         } catch {
-            print("Purchase failed: \(error)")
+            errorMessage = "Purchase failed: \(error.localizedDescription)"
+            showErrorAlert = true
         }
     }
 }
