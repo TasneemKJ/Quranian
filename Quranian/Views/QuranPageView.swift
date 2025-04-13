@@ -3,7 +3,6 @@ import SwiftUI
 struct QuranPageView: View {
     let pageNumber: Int
     let verses: [Verse]
-
     
     @AppStorage("quranFontSize") private var fontSize: Double = 17
     @State private var magnifyBy: CGFloat = 1.0
@@ -76,13 +75,15 @@ struct QuranPageView: View {
     }
     
     private func surahHeader(surahName: String) -> some View {
-        Text("سورة \(surahName)")
-            .font(.title3.bold())
-            .foregroundColor(.primary)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(Color.green.opacity(0.1))
-            .clipShape(Capsule())
+        VStack{
+            Text("سورة \(surahName)")
+                .font(.title3.bold())
+                .foregroundColor(.primary)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(Color.green.opacity(0.1))
+                .clipShape(Capsule())
+        }
     }
     
     private var basmalaView: some View {
@@ -123,26 +124,30 @@ struct QuranPageView: View {
     }
     
     private func tooltipView(for verse: Verse) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(verse.text.en)
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.white)
+                .font(.system(size: fontSize, weight: .medium))
+                .foregroundColor(.black)
                 .multilineTextAlignment(.leading)
                 .environment(\.layoutDirection, .leftToRight)
             
-            Text("Surah \(verse.surahName?.en ?? ""):\(verse.number)")
+            Text("Surah \(verse.surahName?.en ?? "") : \(verse.number)")
                 .font(.caption)
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.leading)
         }
-        .padding(10)
-        .frame(maxWidth: 250)
-        .background(Color.black.opacity(0.8))
-        .cornerRadius(8)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.white.opacity(0.2), lineWidth: 1)
-        )
-        .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: 2)
+        .padding(12)
+        .frame(maxWidth: 280)
+        .background(.ultraThinMaterial)
+        .background(Color.blue.opacity(0.3))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
+        .onTapGesture {
+            withAnimation {
+                showTooltip = false
+                selectedVerse = nil
+            }
+        }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                 withAnimation {
@@ -206,7 +211,9 @@ struct QuranPageView: View {
             var vstr = AttributedString("\(verse.text.ar) \(ayahNumberCircle(verse.number)) ")
             if let url = URL(string: "quran://\(verse.surahNumber ?? 0)_\(verse.number)") {
                 vstr.link = url
+                vstr.foregroundColor = .black
             }
+            
             complete += vstr
         }
         return complete
