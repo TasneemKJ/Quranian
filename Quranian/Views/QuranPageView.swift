@@ -114,8 +114,8 @@ struct QuranPageView: View {
                     
                     if let verse = selectedVerse, showTooltip {
                         tooltipView(for: verse)
-                            .offset(y: -50)
                             .transition(.opacity)
+                            .zIndex(1)
                     }
                 }
                 .gesture(magnificationGesture)
@@ -126,7 +126,7 @@ struct QuranPageView: View {
     private func tooltipView(for verse: Verse) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(verse.text.en)
-                .font(.system(size: fontSize, weight: .medium))
+                .font(.system(size: fontSize * 0.7 , weight: .medium))
                 .foregroundColor(.black)
                 .multilineTextAlignment(.leading)
                 .environment(\.layoutDirection, .leftToRight)
@@ -215,7 +215,12 @@ struct QuranPageView: View {
             }
             
             complete += vstr
+            
+            if verse.number == 1 && verse.surahNumber == 1 {
+                complete += "\n"
+            }
         }
+        
         return complete
     }
     
