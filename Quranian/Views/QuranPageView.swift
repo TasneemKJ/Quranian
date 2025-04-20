@@ -156,6 +156,7 @@ struct QuranPageView: View {
                 }
             }
         }
+        .position(.zero)
     }
     
     private var zoomControls: some View {
@@ -241,7 +242,7 @@ struct QuranPageView: View {
         }
         
         selectedVerse = verse
-        showTooltip = true
+        showTooltip = false // chage to true to enable tooltip
     }
     
     private func decreaseFontSize() {
